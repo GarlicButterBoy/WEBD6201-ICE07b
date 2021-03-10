@@ -1,7 +1,6 @@
 "use strict";
+var core;
 (function (core) {
-    m_activeLink: string;
-    m_routingTable: string[];
     class Router {
         // constructors
         constructor() {
@@ -70,6 +69,7 @@
     }
     core.Router = Router;
 })(core || (core = {}));
+//TODO: need to move the code below into its own file
 let router = new core.Router();
 router.AddTable(["/",
     "/home",

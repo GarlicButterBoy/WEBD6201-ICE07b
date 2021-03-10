@@ -1,6 +1,7 @@
 "use strict";
 // Contact Class
-((core) => {
+var core;
+(function (core) {
     class Contact {
         // constructor
         /**

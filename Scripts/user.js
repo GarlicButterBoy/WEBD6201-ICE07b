@@ -1,6 +1,7 @@
 "use strict";
 // User Class
-((core) => {
+var core;
+(function (core) {
     class User {
         // constructor
         /**
