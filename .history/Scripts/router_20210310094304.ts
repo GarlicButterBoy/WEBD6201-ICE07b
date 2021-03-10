@@ -107,7 +107,7 @@ router.AddTable(["/",
                  "/login", 
                  "/edit"]);
                 
-let route = location.pathname; // alias for location.pathname
+let route = location.href; // alias for location.pathname
 
 //console.log(location.pathname);
 console.log(router);
