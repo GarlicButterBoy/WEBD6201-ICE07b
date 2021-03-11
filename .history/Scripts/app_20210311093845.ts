@@ -56,7 +56,8 @@ namespace core
      */
     function loadLink(link:string, data:string = ""):void
     {
-      highlightActiveLink(link, data);
+      highlightActiveLink(link:string, data:string = "")
+
       loadContent(router.ActiveLink, ActiveLinkCallBack(router.ActiveLink));
       history.pushState({},"", router.ActiveLink); // this replaces the url displayed in the browser
     }
@@ -115,6 +116,7 @@ namespace core
 
     function displayHome():void
     {
+      console.log("Home page function called");
         
     }
 
@@ -490,6 +492,7 @@ namespace core
      */
     function Start(): void
     {
+        console.log("App Started...");
 
         loadHeader(router.ActiveLink);
       

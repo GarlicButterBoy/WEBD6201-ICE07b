@@ -25,14 +25,14 @@ namespace core
     }
 
     /**
-     * Highlights the active link in the navbar
-     * @param link 
-     * @param data 
+     * This function switches page content to the relative link passed into the function
+     * optionally, LinkData can also be passed
+     * @param {string} link
+     * @param {string} [data=""]
+     * @returns {void}
      */
-    function highlightActiveLink(link:string, data:string = ""):void
+    function loadLink(link:string, data:string = ""):void
     {
-      $(`#${router.ActiveLink}`).removeClass("active"); // removes highlighted link
-
       if (link == "logout")
       {
         sessionStorage.clear();
@@ -43,22 +43,11 @@ namespace core
         router.ActiveLink = link;
         router.LinkData = data;
       }
-      
-      $(`#${router.ActiveLink}`).addClass("active"); // applies highlighted link to new page
-    }
-
-    /**
-     * This function switches page content to the relative link passed into the function
-     * optionally, LinkData can also be passed
-     * @param {string} link
-     * @param {string} [data=""]
-     * @returns {void}
-     */
-    function loadLink(link:string, data:string = ""):void
-    {
-      highlightActiveLink(link, data);
-      loadContent(router.ActiveLink, ActiveLinkCallBack(router.ActiveLink));
-      history.pushState({},"", router.ActiveLink); // this replaces the url displayed in the browser
+       $(`#${router.ActiveLink}`).removeClass("active"); // removes highlighted link
+       
+       loadContent(router.ActiveLink, ActiveLinkCallBack(router.ActiveLink));
+       $(`#${router.ActiveLink}`).addClass("active"); // applies highlighted link to new page
+       history.pushState({},"", router.ActiveLink); // this replaces the url displayed in the browser
     }
 
     /**
@@ -115,6 +104,7 @@ namespace core
 
     function displayHome():void
     {
+      console.log("Home page function called");
         
     }
 
@@ -402,17 +392,15 @@ namespace core
 
     function toggleLogin():void
     {
-      let contactListLink = $("#contactListLink")[0];
-
       // if user is logged in
-      if(sessionStorage.getItem("user")) //logged in ----------------------
+      if(sessionStorage.getItem("user"))
       {
         // swap out the login link for logout
         $("#loginListItem").html(
         `<a id="logout" class="nav-link" aria-current="page"><i class="fas fa-sign-out-alt"></i> Logout</a>`
         );
        
-        //if the element doesn't exist
+        let contactListLink = $("#contactListLink")[0]; //if the element doesn't exist
         if (!contactListLink)
         { //create it
           $(`<li id="contactListLink" class="nav-item">
@@ -432,17 +420,24 @@ namespace core
           });
         }
       }
-      else //logged out -----------------------
+      else
       {
         // swap out the login link for logout
         $("#loginListItem").html(
           `<a id="login" class="nav-link" aria-current="page"><i class="fas fa-sign-in-alt"></i> Login</a>`
           );
-          
-          if (contactListLink)
-          {
-            $("#contactListLink").remove();
-          }
+
+          $("#login").on("click", function()
+        {
+          // redirect back to login
+          loadLink("login");
+        });
+
+        // make it look like each nav item is an active link
+        $("#login").on("mouseover", function()
+        {
+          $(this).css('cursor', 'pointer');
+        });
       }
       addLinkEvents();
     }
@@ -490,6 +485,7 @@ namespace core
      */
     function Start(): void
     {
+        console.log("App Started...");
 
         loadHeader(router.ActiveLink);
       

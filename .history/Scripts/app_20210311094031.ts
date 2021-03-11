@@ -490,6 +490,7 @@ namespace core
      */
     function Start(): void
     {
+        console.log("App Started...");
 
         loadHeader(router.ActiveLink);
       

@@ -24,27 +24,9 @@ namespace core
         });
     }
 
-    /**
-     * Highlights the active link in the navbar
-     * @param link 
-     * @param data 
-     */
-    function highlightActiveLink(link:string, data:string = ""):void
+    function highlightActiveLink(link:string):void
     {
-      $(`#${router.ActiveLink}`).removeClass("active"); // removes highlighted link
 
-      if (link == "logout")
-      {
-        sessionStorage.clear();
-        router.ActiveLink = "login";
-      }
-      else
-      {
-        router.ActiveLink = link;
-        router.LinkData = data;
-      }
-      
-      $(`#${router.ActiveLink}`).addClass("active"); // applies highlighted link to new page
     }
 
     /**
@@ -56,8 +38,21 @@ namespace core
      */
     function loadLink(link:string, data:string = ""):void
     {
-      highlightActiveLink(link, data);
       loadContent(router.ActiveLink, ActiveLinkCallBack(router.ActiveLink));
+
+      if (link == "logout")
+      {
+        sessionStorage.clear();
+        router.ActiveLink = "login";
+      }
+      else
+      {
+        router.ActiveLink = link;
+        router.LinkData = data;
+      }
+
+      $(`#${router.ActiveLink}`).removeClass("active"); // removes highlighted link
+      $(`#${router.ActiveLink}`).addClass("active"); // applies highlighted link to new page
       history.pushState({},"", router.ActiveLink); // this replaces the url displayed in the browser
     }
 
@@ -115,6 +110,7 @@ namespace core
 
     function displayHome():void
     {
+      console.log("Home page function called");
         
     }
 
@@ -490,6 +486,7 @@ namespace core
      */
     function Start(): void
     {
+        console.log("App Started...");
 
         loadHeader(router.ActiveLink);
       

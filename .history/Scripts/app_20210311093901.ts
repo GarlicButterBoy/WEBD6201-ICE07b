@@ -115,6 +115,7 @@ namespace core
 
     function displayHome():void
     {
+      console.log("Home page function called");
         
     }
 
@@ -490,6 +491,7 @@ namespace core
      */
     function Start(): void
     {
+        console.log("App Started...");
 
         loadHeader(router.ActiveLink);
       

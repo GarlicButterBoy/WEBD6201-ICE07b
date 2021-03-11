@@ -25,11 +25,13 @@ namespace core
     }
 
     /**
-     * Highlights the active link in the navbar
-     * @param link 
-     * @param data 
+     * This function switches page content to the relative link passed into the function
+     * optionally, LinkData can also be passed
+     * @param {string} link
+     * @param {string} [data=""]
+     * @returns {void}
      */
-    function highlightActiveLink(link:string, data:string = ""):void
+    function loadLink(link:string, data:string = ""):void
     {
       $(`#${router.ActiveLink}`).removeClass("active"); // removes highlighted link
 
@@ -43,22 +45,11 @@ namespace core
         router.ActiveLink = link;
         router.LinkData = data;
       }
-      
-      $(`#${router.ActiveLink}`).addClass("active"); // applies highlighted link to new page
-    }
-
-    /**
-     * This function switches page content to the relative link passed into the function
-     * optionally, LinkData can also be passed
-     * @param {string} link
-     * @param {string} [data=""]
-     * @returns {void}
-     */
-    function loadLink(link:string, data:string = ""):void
-    {
-      highlightActiveLink(link, data);
-      loadContent(router.ActiveLink, ActiveLinkCallBack(router.ActiveLink));
-      history.pushState({},"", router.ActiveLink); // this replaces the url displayed in the browser
+       
+       
+       $(`#${router.ActiveLink}`).addClass("active"); // applies highlighted link to new page
+       loadContent(router.ActiveLink, ActiveLinkCallBack(router.ActiveLink));
+       history.pushState({},"", router.ActiveLink); // this replaces the url displayed in the browser
     }
 
     /**
@@ -115,6 +106,7 @@ namespace core
 
     function displayHome():void
     {
+      console.log("Home page function called");
         
     }
 
@@ -490,6 +482,7 @@ namespace core
      */
     function Start(): void
     {
+        console.log("App Started...");
 
         loadHeader(router.ActiveLink);
       
