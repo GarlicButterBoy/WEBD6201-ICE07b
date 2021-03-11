@@ -205,7 +205,7 @@ namespace core
 
         $("#sendButton").on("click", (event)=> 
         {
-          //event.preventDefault();
+          event.preventDefault();
 
           let subscribedCheckbox = $("#subscribeCheckbox")[0] as HTMLInputElement;
           if(subscribedCheckbox.checked)

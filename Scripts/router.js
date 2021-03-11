@@ -13,6 +13,12 @@ var core;
         set ActiveLink(link) {
             this.m_activeLink = link;
         }
+        get LinkData() {
+            return this.m_linkData;
+        }
+        set LinkData(data) {
+            this.m_linkData = data;
+        }
         // Public methods
         /**
          * Adds a new route to the Routing Table
@@ -82,7 +88,6 @@ router.AddTable(["/",
     "/login",
     "/edit"]);
 let route = location.pathname; // alias for location.pathname
-
 if (router.Find(route) > -1) {
     router.ActiveLink = (route == "/") ? "home" : route.substring(1);
 }

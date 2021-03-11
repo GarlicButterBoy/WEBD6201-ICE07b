@@ -1,14 +1,48 @@
 "use strict";
 var core;
 (function (core) {
+    function addLinkEvents() {
+        //remove all events first
+        $("ul>li>a").off("click");
+        $("ul>li>a").off("mouseover");
+        // loop through each anchor tag in the unordered list and 
+        // add an event listener / handler to allow for 
+        // content injection
+        $("ul>li>a").on("click", function () {
+            loadLink($(this).attr("id"));
+        });
+        // make it look like each nav item is an active link
+        $("ul>li>a").on("mouseover", function () {
+            $(this).css('cursor', 'pointer');
+        });
+    }
     /**
-     *
+     * Highlights the active link in the navbar
+     * @param link
+     * @param data
      */
-    function loadLink(link) {
+    function highlightActiveLink(link, data = "") {
         $(`#${router.ActiveLink}`).removeClass("active"); // removes highlighted link
-        router.ActiveLink = link;
-        loadContent(router.ActiveLink, ActiveLinkCallBack(router.ActiveLink));
+        if (link == "logout") {
+            sessionStorage.clear();
+            router.ActiveLink = "login";
+        }
+        else {
+            router.ActiveLink = link;
+            router.LinkData = data;
+        }
         $(`#${router.ActiveLink}`).addClass("active"); // applies highlighted link to new page
+    }
+    /**
+     * This function switches page content to the relative link passed into the function
+     * optionally, LinkData can also be passed
+     * @param {string} link
+     * @param {string} [data=""]
+     * @returns {void}
+     */
+    function loadLink(link, data = "") {
+        highlightActiveLink(link, data);
+        loadContent(router.ActiveLink, ActiveLinkCallBack(router.ActiveLink));
         history.pushState({}, "", router.ActiveLink); // this replaces the url displayed in the browser
     }
     /**
@@ -20,18 +54,8 @@ var core;
         // inject the Header
         $.get("./Views/components/header.html", function (data) {
             $("header").html(data); // load the navigation bar
-            toggleLogin(); // add login / logout and secure links
             $(`#${pageName}`).addClass("active"); // highlight active link
-            // loop through each anchor tag in the unordered list and 
-            // add an event listener / handler to allow for 
-            // content injection
-            $("a").on("click", function () {
-                loadLink($(this).attr("id"));
-            });
-            // make it look like each nav item is an active link
-            $("a").on("mouseover", function () {
-                $(this).css('cursor', 'pointer');
-            });
+            addLinkEvents();
         });
     }
     /**
@@ -45,6 +69,7 @@ var core;
         // inject content
         $.get(`./Views/content/${pageName}.html`, function (data) {
             $("main").html(data);
+            toggleLogin();
             callback();
         });
     }
@@ -59,7 +84,6 @@ var core;
         });
     }
     function displayHome() {
-        console.log("Home page function called");
     }
     function displayAbout() {
     }
@@ -115,6 +139,7 @@ var core;
         // form validation
         formValidation();
         $("#sendButton").on("click", (event) => {
+            //event.preventDefault();
             let subscribedCheckbox = $("#subscribeCheckbox")[0];
             if (subscribedCheckbox.checked) {
                 let fullName = $("#fullName")[0];
@@ -152,21 +177,21 @@ var core;
             }
             contactList.innerHTML = data;
             $("button.edit").on("click", function () {
-                location.href = "/edit#" + $(this).val();
+                loadLink("edit", $(this).val().toString());
             });
             $("button.delete").on("click", function () {
                 if (confirm("Are you sure?")) {
                     localStorage.removeItem($(this).val().toString());
                 }
-                location.href = "/contact-list"; // refresh the page
+                loadLink("contact-list"); // refresh the page
             });
             $("#addButton").on("click", function () {
-                location.href = "/edit";
+                loadLink("edit");
             });
         }
     }
     function displayEdit() {
-        let key = location.hash.substring(1);
+        let key = router.LinkData;
         let contact = new core.Contact();
         // check to ensure that the key is not empty
         if (key != "") {
@@ -198,11 +223,11 @@ var core;
             // add the contact info to localStorage
             localStorage.setItem(key, contact.serialize());
             // return to the contact list
-            location.href = "/contact-list";
+            loadLink("contact-list");
         });
         $("#cancelButton").on("click", function () {
             // return to the contact list
-            location.href = "/contact-list";
+            loadLink("contact-list");
         });
     }
     function displayLogin() {
@@ -230,7 +255,7 @@ var core;
                     // hide any error message
                     messageArea.removeAttr("class").hide();
                     // redirect user to secure area - contact-list.html
-                    location.href = "/contact-list";
+                    loadLink("contact-list");
                 }
                 else {
                     // display an error message
@@ -243,39 +268,47 @@ var core;
             // clear the login form
             document.forms[0].reset();
             // return to the home page
-            location.href = "/home";
+            loadLink("home");
         });
     }
     function displayRegister() {
     }
     function toggleLogin() {
+        let contactListLink = $("#contactListLink")[0];
         // if user is logged in
-        if (sessionStorage.getItem("user")) {
+        if (sessionStorage.getItem("user")) //logged in ----------------------
+         {
             // swap out the login link for logout
             $("#loginListItem").html(`<a id="logout" class="nav-link" aria-current="page"><i class="fas fa-sign-out-alt"></i> Logout</a>`);
-            $("#logout").on("click", function () {
-                // perform logout
-                sessionStorage.clear();
-                // redirect back to login
-                location.href = "/login";
-            });
-            // make it look like each nav item is an active link
-            $("#logout").on("mouseover", function () {
-                $(this).css('cursor', 'pointer');
-            });
-            $(`<li class="nav-item">
-        <a id="contact-list" class="nav-link" aria-current="page"><i class="fas fa-users fa-lg"></i> Contact List</a>
-      </li>`).insertBefore("#loginListItem");
+            //if the element doesn't exist
+            if (!contactListLink) { //create it
+                $(`<li id="contactListLink" class="nav-item">
+          <a id="contact-list" class="nav-link" aria-current="page"><i class="fas fa-users fa-lg"></i> Contact List</a>
+          </li>`).insertBefore("#loginListItem");
+                $("#login").on("click", function () {
+                    // redirect back to login
+                    loadLink("login");
+                });
+                // make it look like each nav item is an active link
+                $("#login").on("mouseover", function () {
+                    $(this).css('cursor', 'pointer');
+                });
+            }
         }
-        else {
+        else //logged out -----------------------
+         {
             // swap out the login link for logout
             $("#loginListItem").html(`<a id="login" class="nav-link" aria-current="page"><i class="fas fa-sign-in-alt"></i> Login</a>`);
+            if (contactListLink) {
+                $("#contactListLink").remove();
+            }
         }
+        addLinkEvents();
     }
     function authGuard() {
         if (!sessionStorage.getItem("user")) {
             // redirect back to login page
-            location.href = "/login";
+            loadLink("login");
         }
     }
     function display404() {
@@ -307,7 +340,6 @@ var core;
      * @returns {void}
      */
     function Start() {
-        console.log("App Started...");
         loadHeader(router.ActiveLink);
         loadContent(router.ActiveLink, ActiveLinkCallBack(router.ActiveLink));
         loadFooter();
