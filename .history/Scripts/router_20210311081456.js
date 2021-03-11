@@ -82,7 +82,8 @@ router.AddTable(["/",
     "/login",
     "/edit"]);
 let route = location.pathname; // alias for location.pathname
-
+//console.log(location.pathname);
+console.log(router);
 if (router.Find(route) > -1) {
     router.ActiveLink = (route == "/") ? "home" : route.substring(1);
 }
