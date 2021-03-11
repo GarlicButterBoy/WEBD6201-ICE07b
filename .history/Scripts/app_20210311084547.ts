@@ -234,7 +234,7 @@ namespace core
         //TODO: Fix this case = link + data
         $("button.edit").on("click", function()
         {
-          loadLink("edit", $(this).val().toString());
+          loadLink("edit", $(this).val());
         });
 
          $("button.delete").on("click", function(){
@@ -254,7 +254,7 @@ namespace core
 
     function displayEdit():void
     {
-      let key = router.LinkData;
+      let key = location.hash.substring(1);
 
       let contact = new core.Contact();
 

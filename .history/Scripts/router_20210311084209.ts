@@ -33,10 +33,7 @@ namespace core
             return this.m_linkData;
         }
 
-        set LinkData(data:string)
-        {
-            this.m_linkData = data;
-        }
+        set LinkData()
         // Public methods
 
         /**

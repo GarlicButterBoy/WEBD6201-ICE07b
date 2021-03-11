@@ -2,17 +2,12 @@
 namespace core
 {
     /**
-     * This function switches page content to the relative link passed into the function
-     * optionally, LinkData can also be passed
-     * @param {string} link
-     * @param {string} [data=""]
-     * @returns {void}
+     * 
      */
-    function loadLink(link:string, data:string = ""):void
+    function loadLink(link:string):void
     {
        $(`#${router.ActiveLink}`).removeClass("active"); // removes highlighted link
        router.ActiveLink = link;
-       router.LinkData = data;
        loadContent(router.ActiveLink, ActiveLinkCallBack(router.ActiveLink));
        $(`#${router.ActiveLink}`).addClass("active"); // applies highlighted link to new page
        history.pushState({},"", router.ActiveLink); // this replaces the url displayed in the browser
@@ -234,7 +229,7 @@ namespace core
         //TODO: Fix this case = link + data
         $("button.edit").on("click", function()
         {
-          loadLink("edit", $(this).val().toString());
+          location.href = "/edit#" + $(this).val();
         });
 
          $("button.delete").on("click", function(){
@@ -254,7 +249,7 @@ namespace core
 
     function displayEdit():void
     {
-      let key = router.LinkData;
+      let key = location.hash.substring(1);
 
       let contact = new core.Contact();
 
@@ -306,7 +301,7 @@ namespace core
       $("#cancelButton").on("click", function()
       {
         // return to the contact list
-        loadLink("contact-list");
+        location.href = "/contact-list";
       });
     }
 
@@ -346,7 +341,7 @@ namespace core
             messageArea.removeAttr("class").hide();
 
             // redirect user to secure area - contact-list.html
-            loadLink("contact-list");
+            location.href = "/contact-list";
           }
           else
           {
@@ -362,7 +357,7 @@ namespace core
         // clear the login form
         document.forms[0].reset();
         // return to the home page
-        loadLink("home");
+        location.href = "/home";
       });
     }
 
@@ -387,7 +382,7 @@ namespace core
           sessionStorage.clear();
 
           // redirect back to login
-          loadLink("login");
+          location.href = "/login";
         });
 
         // make it look like each nav item is an active link
@@ -415,7 +410,7 @@ namespace core
       if(!sessionStorage.getItem("user"))
       {
       // redirect back to login page
-      loadLink("login");
+      location.href = "/login";
       }
     }
 

@@ -2,17 +2,12 @@
 namespace core
 {
     /**
-     * This function switches page content to the relative link passed into the function
-     * optionally, LinkData can also be passed
-     * @param {string} link
-     * @param {string} [data=""]
-     * @returns {void}
+     * This function 
      */
     function loadLink(link:string, data:string = ""):void
     {
        $(`#${router.ActiveLink}`).removeClass("active"); // removes highlighted link
        router.ActiveLink = link;
-       router.LinkData = data;
        loadContent(router.ActiveLink, ActiveLinkCallBack(router.ActiveLink));
        $(`#${router.ActiveLink}`).addClass("active"); // applies highlighted link to new page
        history.pushState({},"", router.ActiveLink); // this replaces the url displayed in the browser
@@ -234,7 +229,7 @@ namespace core
         //TODO: Fix this case = link + data
         $("button.edit").on("click", function()
         {
-          loadLink("edit", $(this).val().toString());
+          location.href = "/edit#" + $(this).val();
         });
 
          $("button.delete").on("click", function(){
@@ -254,7 +249,7 @@ namespace core
 
     function displayEdit():void
     {
-      let key = router.LinkData;
+      let key = location.hash.substring(1);
 
       let contact = new core.Contact();
 

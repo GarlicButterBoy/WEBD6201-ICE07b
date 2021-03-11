@@ -5,7 +5,7 @@ namespace core
      * This function switches page content to the relative link passed into the function
      * optionally, LinkData can also be passed
      * @param {string} link
-     * @param {string} [data=""]
+     * @param {string} data
      * @returns {void}
      */
     function loadLink(link:string, data:string = ""):void
@@ -234,7 +234,7 @@ namespace core
         //TODO: Fix this case = link + data
         $("button.edit").on("click", function()
         {
-          loadLink("edit", $(this).val().toString());
+          location.href = "/edit#" + $(this).val();
         });
 
          $("button.delete").on("click", function(){
@@ -254,7 +254,7 @@ namespace core
 
     function displayEdit():void
     {
-      let key = router.LinkData;
+      let key = location.hash.substring(1);
 
       let contact = new core.Contact();
 

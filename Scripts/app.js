@@ -2,6 +2,16 @@
 var core;
 (function (core) {
     /**
+     *
+     */
+    function loadLink(link) {
+        $(`#${router.ActiveLink}`).removeClass("active"); // removes highlighted link
+        router.ActiveLink = link;
+        loadContent(router.ActiveLink, ActiveLinkCallBack(router.ActiveLink));
+        $(`#${router.ActiveLink}`).addClass("active"); // applies highlighted link to new page
+        history.pushState({}, "", router.ActiveLink); // this replaces the url displayed in the browser
+    }
+    /**
      * Inject the Navigation bar into the Header element and highlight the active link based on the pageName parameter
      *
      * @param {string} pageName
@@ -16,11 +26,7 @@ var core;
             // add an event listener / handler to allow for 
             // content injection
             $("a").on("click", function () {
-                $(`#${router.ActiveLink}`).removeClass("active"); // removes highlighted link
-                router.ActiveLink = $(this).attr("id");
-                loadContent(router.ActiveLink, ActiveLinkCallBack(router.ActiveLink));
-                $(`#${router.ActiveLink}`).addClass("active"); // applies highlighted link to new page
-                history.pushState({}, "", router.ActiveLink); // this replaces the url displayed in the browser
+                loadLink($(this).attr("id"));
             });
             // make it look like each nav item is an active link
             $("a").on("mouseover", function () {
