@@ -41,8 +41,10 @@ var core;
      * @returns {void}
      */
     function loadLink(link, data = "") {
-        highlightActiveLink(link, data);
+        highlightActiveLink(link);
+        router.LinkData = data;
         loadContent(router.ActiveLink, ActiveLinkCallBack(router.ActiveLink));
+        highlightActiveLink(link);
         history.pushState({}, "", router.ActiveLink); // this replaces the url displayed in the browser
     }
     /**
@@ -304,6 +306,7 @@ var core;
             }
         }
         addLinkEvents();
+        highlightActiveLink(router.ActiveLink);
     }
     function authGuard() {
         if (!sessionStorage.getItem("user")) {

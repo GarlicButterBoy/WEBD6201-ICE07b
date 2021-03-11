@@ -449,7 +449,7 @@ namespace core
           }
       }
       addLinkEvents();
-      highlightActiveLink(router.ActiveLink);
+      //highlightActiveLink(router.ActiveLink, router.LinkData);
     }
 
     function authGuard():void

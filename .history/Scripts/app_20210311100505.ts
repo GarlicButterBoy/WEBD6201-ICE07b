@@ -56,10 +56,8 @@ namespace core
      */
     function loadLink(link:string, data:string = ""):void
     {
-      highlightActiveLink(link);
-      router.LinkData = data;
+      highlightActiveLink(link, data);
       loadContent(router.ActiveLink, ActiveLinkCallBack(router.ActiveLink));
-      highlightActiveLink(link);
       history.pushState({},"", router.ActiveLink); // this replaces the url displayed in the browser
     }
 
@@ -449,7 +447,7 @@ namespace core
           }
       }
       addLinkEvents();
-      highlightActiveLink(router.ActiveLink);
+      highlightActiveLink();
     }
 
     function authGuard():void

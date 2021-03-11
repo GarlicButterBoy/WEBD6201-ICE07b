@@ -56,10 +56,8 @@ namespace core
      */
     function loadLink(link:string, data:string = ""):void
     {
-      highlightActiveLink(link);
-      router.LinkData = data;
+      highlightActiveLink(link, data);
       loadContent(router.ActiveLink, ActiveLinkCallBack(router.ActiveLink));
-      highlightActiveLink(link);
       history.pushState({},"", router.ActiveLink); // this replaces the url displayed in the browser
     }
 
@@ -95,6 +93,7 @@ namespace core
       $.get(`./Views/content/${pageName}.html`, function(data)
       {
         $("main").html(data);
+        
         toggleLogin();
         callback();
         
@@ -449,7 +448,7 @@ namespace core
           }
       }
       addLinkEvents();
-      highlightActiveLink(router.ActiveLink);
+      
     }
 
     function authGuard():void
